@@ -137,14 +137,18 @@ const Contact = () => {
                     <h4 className="text-lg font-semibold mb-4">Connect with me</h4>
                     <div className="flex space-x-4">
                       <a 
-                        href="#" 
+                        href="https://www.linkedin.com/in/rajesh-s-135a78274" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
                         className="w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                         aria-label="LinkedIn"
                       >
                         <Linkedin size={22} />
                       </a>
                       <a 
-                        href="#" 
+                        href="https://github.com/rajesh7358-pattu" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
                         className="w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                         aria-label="GitHub"
                       >
