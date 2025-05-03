@@ -29,13 +29,13 @@ const FluidBackground = () => {
     const createGradient = () => {
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
       if (theme === 'dark') {
-        gradient.addColorStop(0, 'rgba(76, 29, 149, 0.1)');  // purple-900
-        gradient.addColorStop(0.5, 'rgba(30, 58, 138, 0.1)'); // blue-900
-        gradient.addColorStop(1, 'rgba(19, 78, 74, 0.1)');   // cyan-900
+        gradient.addColorStop(0, 'rgba(138, 43, 226, 0.25)');  // softer purple
+        gradient.addColorStop(0.5, 'rgba(65, 105, 225, 0.25)'); // softer blue
+        gradient.addColorStop(1, 'rgba(0, 206, 209, 0.25)');   // softer cyan
       } else {
-        gradient.addColorStop(0, 'rgba(216, 180, 254, 0.1)'); // purple-200
-        gradient.addColorStop(0.5, 'rgba(191, 219, 254, 0.1)'); // blue-200
-        gradient.addColorStop(1, 'rgba(165, 243, 252, 0.1)'); // cyan-200
+        gradient.addColorStop(0, 'rgba(186, 85, 211, 0.25)'); // softer purple
+        gradient.addColorStop(0.5, 'rgba(135, 206, 250, 0.25)'); // softer blue
+        gradient.addColorStop(1, 'rgba(64, 224, 208, 0.25)'); // softer cyan
       }
       return gradient;
     };
@@ -50,22 +50,25 @@ const FluidBackground = () => {
       lastX = mouseX;
       lastY = mouseY;
 
-      // Create multiple layers of flowing patterns
-      for (let i = 0; i < 3; i++) {
+      // Create multiple layers of flowing patterns with varying speeds and glowing effect
+      for (let i = 0; i < 4; i++) {
         ctx.save();
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = 0.4 - i * 0.08;
+        ctx.shadowColor = theme === 'dark' ? 'rgba(138, 43, 226, 0.5)' : 'rgba(186, 85, 211, 0.5)';
+        ctx.shadowBlur = 10;
         ctx.fillStyle = createGradient();
 
         for (let j = 0; j < 50; j++) {
+          const speedFactor = 0.001 + i * 0.0004;
           const x = canvas.width * 0.5 + 
-            Math.cos(time * 0.001 + j * 0.2 + i) * (100 + velocityX * 2) +
-            Math.sin(time * 0.002 + j * 0.3) * 50;
+            Math.cos(time * speedFactor + j * 0.2 + i) * (100 + velocityX * 2) +
+            Math.sin(time * speedFactor * 2 + j * 0.3) * 50;
           
           const y = canvas.height * 0.5 + 
-            Math.sin(time * 0.001 + j * 0.2 + i) * (100 + velocityY * 2) +
-            Math.cos(time * 0.002 + j * 0.3) * 50;
+            Math.sin(time * speedFactor + j * 0.2 + i) * (100 + velocityY * 2) +
+            Math.cos(time * speedFactor * 2 + j * 0.3) * 50;
 
-          const size = Math.sin(time * 0.001 + j * 0.1) * 20 + 40;
+          const size = Math.sin(time * speedFactor + j * 0.1) * 20 + 40;
 
           ctx.beginPath();
           ctx.arc(x, y, size, 0, Math.PI * 2);
@@ -74,20 +77,31 @@ const FluidBackground = () => {
         ctx.restore();
       }
 
-      // Add shimmering effect
+      // Add twinkling star-like particles with varying sizes and brightness
       for (let i = 0; i < 100; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
         const size = Math.random() * 2;
-        
+        const alpha = Math.random() * 0.2;
+
         ctx.fillStyle = theme === 'dark' 
-          ? `rgba(255, 255, 255, ${Math.random() * 0.1})`
-          : `rgba(0, 0, 0, ${Math.random() * 0.05})`;
+          ? `rgba(255, 255, 255, ${alpha})`
+          : `rgba(0, 0, 0, ${alpha * 0.5})`;
+
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 5;
         
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
         ctx.fill();
       }
+
+      // Add subtle color pulsation effect
+      const pulse = (Math.sin(time * 0.02) + 1) / 2; // 0 to 1
+      ctx.globalAlpha = 0.05 + pulse * 0.1;
+      ctx.fillStyle = createGradient();
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
 
       time++;
     };
